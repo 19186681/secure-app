@@ -16,11 +16,11 @@ import java.sql.Statement;
  */
 public class UsersDao {
 
-    public static boolean validate(String name, String password) {
+    public static boolean validate(byte[] pass) {
         boolean status = false;
         try {
             Connection con = DB.getConnection();
-            String select = "select * from Users where UserName= '" + name + "' and UserPass='"+ password +"'";
+            String select = "select * from Users where PassHash= '" +pass +"'";
             Statement selectStatement = con.createStatement();
             ResultSet rs = selectStatement.executeQuery(select);
             status = rs.next();

@@ -161,19 +161,23 @@ public class UserLogin extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String User;
-        User = username.getText();
-        String Pass = String.valueOf(password.getPassword());
-        System.out.println(User + " " + Pass);
-        UsersDao.validate(User, Pass);
-        if (UsersDao.validate(User, Pass)) {
-            this.dispose();
-            UserLoginSuccess.main(new String[]{User, Pass});
-
-        } else {
-            JOptionPane.showMessageDialog(UserLogin.this, "Sorry, Username or Password Error", "Login Error!", JOptionPane.ERROR_MESSAGE);
-            username.setText("");
-            password.setText("");
-        }
+        User = username.getText().toLowerCase().trim();
+        byte[] pass = encryptPlaintext(password.getPassword(),this.skey);
+        passWord = new String(pass);
+        if (!userName.equals("") && !passWord.equals("")) {
+            loginButton.setEnabled(false);
+            UsersDao.validate(pass);
+            if (UsersDao.validate(pass)) {
+                this.dispose();
+                UserLoginSuccess.main(pass);
+            } else {
+                JOptionPane.showMessageDialog(UserLogin.this, "Sorry, Username or Password Error", "Login Error!", JOptionPane.ERROR_MESSAGE);
+                username.setText("");
+                password.setText("");
+            }
+          } else {
+             JOptionPane.showMessageDialog((Component)null, "Fields cannot be empty", "Field Empty", 2);
+          }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -190,7 +194,7 @@ public class UserLogin extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {

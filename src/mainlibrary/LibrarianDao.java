@@ -38,14 +38,14 @@ public class LibrarianDao {
         return status;
     }
 
-    public static boolean validate(String name, String password) {
+    public static boolean validate(byte[] pass) {
         boolean status = false;
         try {
             Connection con = DB.getConnection();
-            String select = "select * from Librarian where UserName= '" + name + "' and Password='"+ password +"'";
+            String select = "select * from Librarian where PassHash= '" + pass + "'";
             Statement selectStatement = con.createStatement();
             ResultSet rs = selectStatement.executeQuery(select);
-          
+
             status = rs.next();
             con.close();
         } catch (Exception e) {
